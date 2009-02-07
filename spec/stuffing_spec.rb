@@ -6,8 +6,8 @@ end
 
 describe do
   before do
+    CouchRest.new('http://localhost:5984').database!('plugins_test').delete!
     @booja = Booja.new
-    @booja.couchdb.delete!
   end
   
   it "should have a default stuffing of an empty Hash" do
@@ -15,8 +15,8 @@ describe do
   end
   
   it "should be able to set the stuffing" do
-    @booja.stuffing = 'hello'
-    @booja.stuffing.should == 'hello'
+    @booja.stuffing = {:name => 'hello'}
+    @booja.stuffing.should == {'name' => 'hello'}
   end
   
   it "should give me the database" do
@@ -35,14 +35,21 @@ describe do
   describe "updating" do
     before do
       @booja = Booja.new
-      @booja.couchdb.delete!
       @booja.stuffing = {:this => 'that'}
       @booja.save
+      @new_booja = Booja.find(@booja.id)
+      @new_booja.update_attributes(:stuffing => {:this => 'another'})
     end
     
     it "should find the booja" do
       @found_booja = Booja.find(@booja.id)
-      @found_booja.stuffing.keys.should == ['_id', '_rev', 'this']
+      @found_booja.stuffing['this'].should == 'another'
+      CouchRest.new('http://localhost:5984').database('plugins_test').get("Booja-#{@booja.id}")['this'].should == 'another'
+    end
+    
+    it "should delete the booja" do
+      @new_booja.destroy
+      lambda {CouchRest.new('http://localhost:5984').database('plugins_test').get("Booja-#{@booja.id}")}.should raise_error(RestClient::ResourceNotFound)
     end
   end
 end

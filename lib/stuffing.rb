@@ -20,24 +20,47 @@ module Stuffing
         @@method_name = method_name
         
         def couchdb
-          connection = CouchRest.new("http://#{@@host}:#{@@port}")
-          connection.database!(@@database)
+          @connection ||= CouchRest.new("http://#{@@host}:#{@@port}")
+          @database ||= @connection.database!(@@database)
         end
         
         def couchdb_id
           "#{self.class}-#{id}"
         end
         
+        def couchdb_content
+          send(@@method_name).stringify_keys!
+        end
+        
         define_method(method_name) do
-          @stuffing ||= new_record? ? {} : couchdb.get(couchdb_id)
+          begin
+            @stuffing ||= new_record? ? {} : couchdb.get(couchdb_id)
+          rescue RestClient::ResourceNotFound
+            {}
+          end
         end
         
         define_method("#{method_name}=") do |args|
-          @stuffing = args
+          @stuffing = couchdb_content.deep_merge(args.stringify_keys)
+        end
+        
+        def get_stuffing
+          @stuffing = couchdb.get(couchdb_id)
         end
         
         def create_stuffing
-          couchdb.save({'_id' => couchdb_id}.merge(send(@@method_name)))
+          couchdb.save({'_id' => couchdb_id}.merge(couchdb_content))
+          get_stuffing
+        end
+        
+        def update_stuffing
+          record = couchdb_content.merge({'_id' => couchdb_id, '_rev' => couchdb_content['_rev']})
+          couchdb.save(record)
+          get_stuffing
+        end
+        
+        def destroy_stuffing
+          couchdb.delete(couchdb_content)
         end
 
       end
