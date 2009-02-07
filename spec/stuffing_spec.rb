@@ -4,7 +4,7 @@ class Booja < ActiveRecord::Base
   stuffing
 end
 
-describe do
+describe Booja do
   before do
     CouchRest.new('http://localhost:5984').database!('plugins_test').delete!
     @booja = Booja.new
@@ -51,5 +51,22 @@ describe do
       @new_booja.destroy
       lambda {CouchRest.new('http://localhost:5984').database('plugins_test').get("Booja-#{@booja.id}")}.should raise_error(RestClient::ResourceNotFound)
     end
+  end
+end
+
+class Baja < ActiveRecord::Base
+  stuffing :contents
+  def self.table_name
+    'boojas'
+  end
+end
+
+describe Baja do
+  before do
+    @baja = Baja.new
+  end
+  
+  it "should respond to contents, and not stuffing" do
+    lambda { @baja.stuffing }.should raise_error(NoMethodError)
   end
 end

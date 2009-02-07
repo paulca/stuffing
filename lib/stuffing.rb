@@ -12,24 +12,25 @@ module Stuffing
       after_update :update_stuffing
       after_destroy :destroy_stuffing
       
-      class_eval do
-        
-        @@database = options[:database] || "#{File.basename(RAILS_ROOT)}_#{RAILS_ENV}"
-        @@host = options[:host] || 'localhost'
-        @@port = options[:port] || 5984
-        @@method_name = method_name
-        
+      database = options[:database] || "#{File.basename(RAILS_ROOT)}_#{RAILS_ENV}"
+      host = options[:host] || 'localhost'
+      port = options[:port] || 5984
+      
+      class_eval %Q[
         def couchdb
-          @connection ||= CouchRest.new("http://#{@@host}:#{@@port}")
-          @database ||= @connection.database!(@@database)
-        end
-        
-        def couchdb_id
-          "#{self.class}-#{id}"
+          @connection ||= CouchRest.new("http://#{host}:#{port}")
+          @database ||= @connection.database!('#{database}')
         end
         
         def couchdb_content
-          send(@@method_name).stringify_keys!
+          #{method_name}.stringify_keys!
+        end
+        ]
+      
+      class_eval do
+        
+        def couchdb_id
+          "#{self.class}-#{id}"
         end
         
         define_method(method_name) do
