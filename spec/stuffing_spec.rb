@@ -73,4 +73,8 @@ describe Baja do
   it "should have a contents method" do
     @baja.should respond_to(:contents)
   end
+  
+  it "should have its own id" do
+    @baja.couchdb_id.should == "Baja-1-en"
+  end
 end
