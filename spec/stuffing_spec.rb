@@ -69,4 +69,8 @@ describe Baja do
   it "should respond to contents, and not stuffing" do
     lambda { @baja.stuffing }.should raise_error(NoMethodError)
   end
+  
+  it "should have a contents method" do
+    @baja.should respond_to(:contents)
+  end
 end
