@@ -39,7 +39,7 @@ Stuffing is a Ruby on Rails plugin. Installation is as easy as:
 h2. Example
 
 <pre><code>
-class Post &lt; ActiveRecord::Base
+class Post < ActiveRecord
   stuffing
 end
 </code></pre>
@@ -74,7 +74,7 @@ A sensible set of defaults should let you get up and running with Stuffing / Cou
 You can specify a different method name for your stuffing:
 
 <pre><code>
-  class Post &lt; ActiveRecord::Base
+  class Post < ActiveRecord
     stuffing :contents
   end
 </code></pre>
@@ -85,9 +85,9 @@ You can also dynamically choose the host, database and Couch document ID. You ca
 (inspired by the "interpolated path and url strings in Paperclip":http://dev.thoughtbot.com/paperclip/classes/Paperclip/Attachment.html#M000066)
 
 <pre><code>
-  class Blog &lt; ActiveRecord::Base
+  class Blog < ActiveRecord
   end
-  class Post &lt; ActiveRecord::Base
+  class Post < ActiveRecord
     belongs_to :blog
     stuffing :host => ':couch_host.example.com', :port => '1234', :database => 'blog-:blog.id', :id => ':class-:id-:locale'
     
