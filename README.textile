@@ -1,4 +1,6 @@
-h2. Stuffing
+h1. Stuffing
+
+!http://farm1.static.flickr.com/16/88522698_a77e965511.jpg?v=0!
 
 Stuffing is a Rails plugin that allows you to really easily add CouchDB documents to existing ActiveRecord models.
 
