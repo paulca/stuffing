@@ -20,7 +20,7 @@ module Stuffing
       
       class_eval %Q[
         def couchdb
-          @connection ||= CouchRest.new("http://#{host}:#{port}")
+          @connection ||= CouchRest.new(interpolate("http://#{host}:#{port}"))
           @database ||= @connection.database!('#{database}')
         end
         
@@ -37,7 +37,7 @@ module Stuffing
         
         def interpolate(string)
           string.scan(/:([a-zA-Z_]*)/).flatten.each do |match|
-            string = string.gsub(":#{match}",send(match).to_s)
+            string = string.gsub(":#{match}",send(match).to_s) unless match.empty?
           end
           string
         end
