@@ -153,4 +153,9 @@ describe Binja do
   it "should still work if the method doesn't exist" do
     @binja.couchdb_id.should == 'sweet.ball-yay'
   end
+  
+  it "should allow me to set variables in forms" do
+    @binja.stuffing_title = 'whoop!'
+    @binja.stuffing['title'].should == 'whoop!'
+  end
 end

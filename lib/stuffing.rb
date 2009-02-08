@@ -72,6 +72,10 @@ module Stuffing
           end
         end
         
+        define_method("stuffing_method_name") do
+          method_name
+        end
+        
         define_method("#{method_name}=") do |args|
           @stuffing = couchdb_content.deep_merge(args.stringify_keys)
         end
@@ -93,6 +97,19 @@ module Stuffing
         
         def destroy_stuffing
           couchdb.delete(couchdb_content)
+        end
+        
+        def method_missing(method_name, *args)
+          if method_name.to_s[0,9] == "#{stuffing_method_name}_"
+            item = method_name.to_s.gsub("#{stuffing_method_name}_",'')
+            if item.last == '='
+              send("#{stuffing_method_name}")[item[0,item.size - 1].to_s] = args.first
+            else
+              send("#{stuffing_method_name}")[item]
+            end
+          else
+            super
+          end
         end
 
       end
