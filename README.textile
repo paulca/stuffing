@@ -79,6 +79,20 @@ You can specify a different method name for your stuffing:
 
 This will give you @post.contents instead of @post.stuffing
 
+You can also dynamically choose the host, database and Couch document ID:
+
+<pre><code>
+  class Blog < ActiveRecord::Base
+  end
+  class Post < ActiveRecord::Base
+    belongs_to :blog
+    stuffing :host => ':couch_host.example.com'
+    
+    def couch_host
+    
+    end
+  end
+</code></pre>
 
 
 

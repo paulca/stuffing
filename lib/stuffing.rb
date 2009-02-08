@@ -43,11 +43,15 @@ module Stuffing
           string.scan(/:([a-zA-Z_\.]*)/).flatten.each do |match|
             if !match.empty?
               if match.include?('.')
-                object = self
-                match.split('.').each do |method|
-                  object = object.send(method)
+                begin
+                  object = self
+                  match.split('.').each do |method|
+                    object = object.send(method)
+                  end
+                  string = string.gsub(":#{match}", object)
+                rescue NoMethodError
+                  string = string.gsub(":#{match.split('.').first}",send(match.split('.').first).to_s) 
                 end
-                string = string.gsub(":#{match}", object)
               else
                 string = string.gsub(":#{match}",send(match).to_s) 
               end

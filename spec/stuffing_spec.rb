@@ -110,7 +110,6 @@ end
 
 class Bonja < ActiveRecord::Base
   stuffing :id => ":bill.ball"
-  attr_accessor :locale
   def self.table_name
     'boojas'
   end
@@ -127,5 +126,27 @@ describe Bonja do
   
   it "should still work without specifying a method name" do
     @bonja.couchdb_id.should == 'tickle'
+  end
+end
+
+
+class Binja < ActiveRecord::Base
+  stuffing :id => ":bill.ball"
+  def self.table_name
+    'boojas'
+  end
+  
+  def bill
+    "sweet"
+  end
+end
+
+describe Binja do
+  before do
+    @binja = Binja.new
+  end
+  
+  it "should still work if the method doesn't exist" do
+    @binja.couchdb_id.should == 'sweet.ball'
   end
 end
