@@ -48,7 +48,7 @@ That's all you need to get going. This enables Stuffing by adding a 'stuffing' m
 
 By default, Stuffing will connect to CouchDB on http://localhost:5984. It will use or create a CouchDB database the same name as your Rails app, as defined by your RAILS_ROOT folder and your current environment. For example, if your RAILS_ROOT were /var/www/stuffing_app in production environment, by default Stuffing would use stuffing_app_development as the DB name. Documents are stored with an ID of "Class-ID", so for the example "Post" model above, document IDs in CouchDB would be "Post-1", "Post-2". "Post-3" etc.
 
-To save attributes, you can treat your 'stuffing' method like any other ActiveRecord attribute. Just assign a hash to your "stuffing":
+To save attributes, you can treat your 'stuffing' method like any other ActiveRecord attribute. Just assign a hash to your "stuffing" method:
 
 <pre><code>
   @post = Post.new
