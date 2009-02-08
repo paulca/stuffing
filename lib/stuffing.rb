@@ -21,7 +21,7 @@ module Stuffing
       class_eval %Q[
         def couchdb
           @connection ||= CouchRest.new(interpolate("http://#{host}:#{port}"))
-          @database ||= @connection.database!('#{database}')
+          @database ||= @connection.database!(interpolate('#{database}'))
         end
         
         def couchdb_content
