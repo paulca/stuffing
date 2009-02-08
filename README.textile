@@ -103,6 +103,10 @@ You can also dynamically choose the host, database and Couch document ID. You ca
 
 This will connect, for example, to the 'blog-1' database on http://subdomain.example.com on port 1234, saving the stuffing document as 'Post-1-en' or 'Post-1-fr' depending on the result of the 'locale' method.
 
+h2. What about CouchDB views?
+
+Stuffing completely sidesteps CouchDB views for now. While views are one of the most powerful components of CouchDB, they are also the most difficult to get the head around. Stuffing uses MySQL to pull in records and create relationships between tables. It GETs and POSTs to CouchDB to retrieve and save documents. While there may be extra power by integrating views at a later stage, Stuffing gently gets you up and running by ignoring views completely.
+
 h2. What's next
 
 From where I see it, this is a lot of fun and potentially kind of powerful. The plugin is well tested for basic usage. It's not, however, in any way optimised for performance.
