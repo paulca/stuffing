@@ -162,4 +162,8 @@ describe Binja do
   it "should allow me to create a new binja" do
     Binja.create({:stuffing_tree => 'birch'}).should be_a_kind_of(Binja)
   end
+  
+  it "shouldn't have a type cast nonsense" do
+    @binja.respond_to?('stuffing_before_type_cast').should == false
+  end
 end
