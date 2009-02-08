@@ -41,6 +41,10 @@ describe Booja do
       @new_booja.update_attributes(:stuffing => {:this => 'another'})
     end
     
+    it "should have the right id" do
+      @booja.couchdb_id.should == 'Booja-1'
+    end
+    
     it "should find the booja" do
       @found_booja = Booja.find(@booja.id)
       @found_booja.stuffing['this'].should == 'another'
@@ -55,7 +59,8 @@ describe Booja do
 end
 
 class Baja < ActiveRecord::Base
-  stuffing :contents
+  stuffing :contents, :id => ":class-:id-:locale"
+  attr_accessor :locale
   def self.table_name
     'boojas'
   end
@@ -64,6 +69,7 @@ end
 describe Baja do
   before do
     @baja = Baja.new
+    @baja.locale = 'en'
   end
   
   it "should respond to contents, and not stuffing" do
@@ -74,7 +80,12 @@ describe Baja do
     @baja.should respond_to(:contents)
   end
   
+  it "should have a generic id first" do
+    @baja.couchdb_id.should == "Baja--en"
+  end
+
   it "should have its own id" do
+    @baja.save
     @baja.couchdb_id.should == "Baja-1-en"
   end
 end

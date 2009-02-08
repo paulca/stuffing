@@ -6,6 +6,7 @@ module Stuffing
   end
 
   module StuffingMethod
+
     def stuffing(method_name = :stuffing, options = {})
       
       after_create :create_stuffing
@@ -15,6 +16,7 @@ module Stuffing
       database = options[:database] || "#{File.basename(RAILS_ROOT)}_#{RAILS_ENV}"
       host = options[:host] || 'localhost'
       port = options[:port] || 5984
+      couchdb_id = options[:id] || ":class-:id"
       
       class_eval %Q[
         def couchdb
@@ -25,17 +27,28 @@ module Stuffing
         def couchdb_content
           #{method_name}.stringify_keys!
         end
+        
+        def couchdb_id
+          interpolate "#{couchdb_id}"
+        end
         ]
       
       class_eval do
         
-        def couchdb_id
-          "#{self.class}-#{id}"
+        def interpolate(string)
+          string.scan(/:([a-zA-Z_]*)/).flatten.each do |match|
+            string = string.gsub(":#{match}",send(match).to_s)
+          end
+          string
         end
+        
+        # def couchdb_id
+        #   "#{self.class}-#{id}"
+        # end
         
         define_method(method_name) do
           begin
-            @stuffing ||= new_record? ? {} : couchdb.get(couchdb_id)
+            @stuffing ||= new_record? ? {} : couchdb.get(send("couchdb_id"))
           rescue RestClient::ResourceNotFound
             {}
           end
