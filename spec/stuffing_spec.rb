@@ -89,3 +89,21 @@ describe Baja do
     @baja.couchdb_id.should == "Baja-1-en"
   end
 end
+
+class Banja < ActiveRecord::Base
+  stuffing :id => "this_would_be_silly"
+  attr_accessor :locale
+  def self.table_name
+    'boojas'
+  end
+end
+
+describe Banja do
+  before do
+    @banja = Banja.new
+  end
+  
+  it "should still work without specifying a method name" do
+    @banja.couchdb_id.should == 'this_would_be_silly'
+  end
+end

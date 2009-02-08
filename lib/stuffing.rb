@@ -7,11 +7,15 @@ module Stuffing
 
   module StuffingMethod
 
-    def stuffing(method_name = :stuffing, options = {})
+    def stuffing(*args)
       
       after_create :create_stuffing
       after_update :update_stuffing
       after_destroy :destroy_stuffing
+      
+      method_name = (args.first.kind_of?(Symbol) or args.first.kind_of?(String)) ? args.first : :stuffing
+      options = args.first.kind_of?(Hash) ? args.first : args.second
+      options ||= {}
       
       database = options[:database] || "#{File.basename(RAILS_ROOT)}_#{RAILS_ENV}"
       host = options[:host] || 'localhost'
