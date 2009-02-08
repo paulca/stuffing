@@ -1,2 +1,1 @@
-require 'stuffing'
-ActiveRecord::Base.send(:include, Stuffing)
+require File.join(File.dirname(__FILE__), "lib", "stuffing")
