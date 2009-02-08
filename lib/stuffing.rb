@@ -48,7 +48,7 @@ module Stuffing
                   match.split('.').each do |method|
                     object = object.send(method)
                   end
-                  string = string.gsub(":#{match}", object)
+                  string = string.gsub(":#{match}", "#{object}")
                 rescue NoMethodError
                   string = string.gsub(":#{match.split('.').first}",send(match.split('.').first).to_s) 
                 end

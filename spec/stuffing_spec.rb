@@ -131,13 +131,17 @@ end
 
 
 class Binja < ActiveRecord::Base
-  stuffing :id => ":bill.ball"
+  stuffing :id => ":bill.ball-:site.title"
   def self.table_name
     'boojas'
   end
   
   def bill
     "sweet"
+  end
+  
+  def site
+    OpenStruct.new(:title => 'yay')
   end
 end
 
@@ -147,6 +151,6 @@ describe Binja do
   end
   
   it "should still work if the method doesn't exist" do
-    @binja.couchdb_id.should == 'sweet.ball'
+    @binja.couchdb_id.should == 'sweet.ball-yay'
   end
 end
