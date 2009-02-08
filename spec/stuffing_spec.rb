@@ -107,3 +107,25 @@ describe Banja do
     @banja.couchdb_id.should == 'this_would_be_silly'
   end
 end
+
+class Bonja < ActiveRecord::Base
+  stuffing :id => ":bill.ball"
+  attr_accessor :locale
+  def self.table_name
+    'boojas'
+  end
+  
+  def bill
+    OpenStruct.new(:ball => 'tickle')
+  end
+end
+
+describe Bonja do
+  before do
+    @bonja = Bonja.new
+  end
+  
+  it "should still work without specifying a method name" do
+    @bonja.couchdb_id.should == 'tickle'
+  end
+end

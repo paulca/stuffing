@@ -40,8 +40,18 @@ module Stuffing
       class_eval do
         
         def interpolate(string)
-          string.scan(/:([a-zA-Z_]*)/).flatten.each do |match|
-            string = string.gsub(":#{match}",send(match).to_s) unless match.empty?
+          string.scan(/:([a-zA-Z_\.]*)/).flatten.each do |match|
+            if !match.empty?
+              if match.include?('.')
+                object = self
+                match.split('.').each do |method|
+                  object = object.send(method)
+                end
+                string = string.gsub(":#{match}", object)
+              else
+                string = string.gsub(":#{match}",send(match).to_s) 
+              end
+            end
           end
           string
         end
