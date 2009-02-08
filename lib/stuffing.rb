@@ -99,6 +99,14 @@ module Stuffing
           couchdb.delete(couchdb_content)
         end
         
+        def respond_to?(*args)
+          if args.first.to_s[0,8] == "#{stuffing_method_name}"
+            return true
+          else
+            super
+          end
+        end
+        
         def method_missing(method_name, *args)
           if method_name.to_s[0,9] == "#{stuffing_method_name}_"
             item = method_name.to_s.gsub("#{stuffing_method_name}_",'')

@@ -158,4 +158,8 @@ describe Binja do
     @binja.stuffing_title = 'whoop!'
     @binja.stuffing['title'].should == 'whoop!'
   end
+  
+  it "should allow me to create a new binja" do
+    Binja.create({:stuffing_tree => 'birch'}).should be_a_kind_of(Binja)
+  end
 end
