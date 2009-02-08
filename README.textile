@@ -1,0 +1,88 @@
+h2. Stuffing
+
+Stuffing is a Rails plugin that allows you to really easily add CouchDB documents to existing ActiveRecord models.
+
+I love CouchDB and I love the principles behind it. I love the flexibility of a 'schemaless' document, crash-only architecture and single file databases.
+
+After prototyping a few apps using CouchDB however, I found that I was trying to bend CouchDB around corners that it just didn't fit. There are so many great things that have been developed around ActiveRecord that I take for granted every day like plugins that 'just work' : will_paginate, Paperclip, ThinkingSphinx.
+
+Still, from playing around with CouchDB, I found I was missing some things from my experiments with it. Just adding a form field to a form and getting a per-record field. It's really nice.
+
+And so: Stuffing. Stuffing bridges the gap between building a completetly "ActiveRecord aware" or "ActiveRecord like" wrapper around CouchDB and simply adding the ability to add a "CouchDB" store to an existing ActiveRecord model.
+
+Stick around to see how it works.
+
+h2. Requirements
+
+*CouchDB*
+You can install CouchDB via the CouchDB website:
+http://couchdb.apache.org/downloads.html
+
+*CouchRest*
+Stuffing uses CouchDB via "jchris's CouchRest gem":http://github.com/jchris/couchrest/tree/master.
+
+<pre><code>
+  sudo gem sources -a http://gems.github.com
+  sudo gem install jchris-couchrest
+</code></pre>
+
+h2. Installation
+
+Stuffing is a Ruby on Rails plugin. Installation is as easy as:
+
+<pre><code>
+  ./script/plugin install git://github.com/paulca/stuffing.git
+</code></pre>
+
+h2. Example
+
+<pre><code>
+class Post < ActiveRecord::Base
+  stuffing
+end
+</code></pre>
+
+This enables Stuffing by adding a 'stuffing' method to your ActiveRecord model. This method is a hash that will be persisted in CouchDB after you save or update your model.
+
+By default, Stuffing will connect to CouchDB on http://localhost:5984. It will use or create a CouchDB database the same name as your Rails app, as defined by your RAILS_ROOT folder and your current environment. For exmplae, if your RAILS_ROOT were /var/www/stuffing_app in production environment, by default Stuffing would use stuffing_app_development as the DB name. Documents are stored with an ID of "Class-ID", so or the example "Post" model above, document IDs in CouchDB would be "Post-1", "Post-2". "Post-3" etc.
+
+To save attributes, just assign a hash to your "stuffing":
+
+<pre><code>
+  @post = Post.new
+  @post.stuffing = {:title => 'Fantastic', :description => 'this is an example post'}
+  @post.save
+</code></pre>
+
+The stuffing method can take any hash you want, which will be saved to CouchDB as JSON. Simple types (Strings, Integers etc. will be preserved.)
+
+Your stuffing is retrieved when you load your posts via ActiveRecord:
+
+<pre><code>
+  @post = Post.first
+  @post.stuffing
+  => {:title=>"Fantastic", :description=>"this is an example post"}
+  @post.update_attributes(:stuffing => {:title => 'New stuffing title'})
+</code></pre>
+
+h2. Options
+
+A sensible set of defaults should let you get up and running with Stuffing / CouchDB straight away, but the real magic of CouchDB is that you can really easily connect to multiple databases as everything is done over HTTP. Stuffing accepts a few configuration variables to dynamically choose host / database and even documents.
+
+You can specify a different method name for your stuffing:
+
+<pre><code>
+  class Post < ActiveRecord::Base
+    stuffing :contents
+  end
+</code></pre>
+
+This will give you @post.contents instead of @post.stuffing
+
+
+
+
+Fire up CouchDB and away you go.
+
+
+Copyright (c) 2009 Paul Campbell, released under the MIT license
