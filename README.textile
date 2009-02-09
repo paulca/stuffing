@@ -44,7 +44,7 @@ class Post < ActiveRecord
 end
 </code></pre>
 
-That's all you need to get going. This enables Stuffing by adding a 'stuffing' method to your ActiveRecord model. This method is a hash that will be persisted in CouchDB after you save or update your model.
+That's all you need to get going. This enables Stuffing by adding a 'stuffing' method to your ActiveRecord model. This method is a hash that will be persisted in CouchDB after you save or update your model. Post, above, is just a regular old ActiveRecord model, with a "posts" table and maybe a few fields. They all still work as normal, but you get a new magic "stuffing" attribute. This can contain whatever you want and it can change record to record. CouchDB doesn't care what you stuff into it.
 
 By default, Stuffing will connect to CouchDB on http://localhost:5984. It will use or create a CouchDB database the same name as your Rails app, as defined by your RAILS_ROOT folder and your current environment. For example, if your RAILS_ROOT were /var/www/stuffing_app in production environment, by default Stuffing would use stuffing_app_development as the DB name. Documents are stored with an ID of "Class-ID", so for the example "Post" model above, document IDs in CouchDB would be "Post-1", "Post-2". "Post-3" etc.
 
