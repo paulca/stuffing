@@ -67,6 +67,23 @@ Your stuffing is retrieved when you load your posts via ActiveRecord:
   @post.update_attributes(:stuffing => {:title => 'New stuffing title'})
 </code></pre>
 
+Stuffing also gives you access (via method_missing, I know, I'm sorry) to an unlimited supply of attributes, for assigning and retrieving from your Couch document:
+
+<pre><code>
+  @post = Post.first
+  @post.stuffing_new_title = "A magic new title"
+  @post.stuffing_other_attribute = "Tasty"
+  
+  @post.stuffing_new_title
+  => "A magic new title"
+  
+  @post.stuffing_other_attribute
+  => "Tasty"
+  
+  @post.stuffing
+  => {'new_title' => "A magic new title", 'other_attribute' => "Tasty"}
+</code></pre>
+
 h2. Options
 
 A sensible set of defaults should let you get up and running with Stuffing / CouchDB straight away, but the real magic of CouchDB is that you can really easily connect to multiple databases as everything is done over HTTP. Stuffing accepts a few configuration variables to dynamically choose host / database and even documents.
