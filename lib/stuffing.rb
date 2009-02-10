@@ -14,7 +14,7 @@ module Stuffing
       after_destroy :destroy_stuffing
       
       method_name = (args.first.kind_of?(Symbol) or args.first.kind_of?(String)) ? args.first : :stuffing
-      options = args.first.kind_of?(Hash) ? args.first : args.second
+      options = args.first.kind_of?(Hash) ? args.first : args[1]
       options ||= {}
       
       database = options[:database] || "#{File.basename(RAILS_ROOT)}_#{RAILS_ENV}"
