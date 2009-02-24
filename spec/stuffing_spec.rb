@@ -129,7 +129,6 @@ describe Bonja do
   end
 end
 
-
 class Binja < ActiveRecord::Base
   stuffing :id => ":bill.ball-:site.title"
   def self.table_name
@@ -165,5 +164,28 @@ describe Binja do
   
   it "shouldn't have a type cast nonsense" do
     @binja.respond_to?('stuffing_before_type_cast').should == false
+  end
+
+end
+
+class Bahoja < ActiveRecord::Base
+  def self.table_name
+    'boojas'
+  end  
+end
+
+describe Bahoja, "creating a couch record when the activerecord exists, but the couch doc doesn't" do
+  before do
+    @bajoha = Bahoja.create
+    @binja = Binja.find(@bajoha.id)
+  end
+  
+  it "should let me find it by binja" do
+    @binja.created_at.to_date.should == @bajoha.created_at.to_date
+  end
+  
+  it "should let me update the binja" do
+    @binja.stuffing_banana = 'banana!'
+    lambda { @binja.save }.should_not raise_error
   end
 end
